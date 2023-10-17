@@ -1,3 +1,4 @@
+import { Menu } from "@/components/Menu";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -16,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="flex flex-row bg-white h-screen">
+        <Menu />
+        <div className="h-screen text-black p-12">{children}</div>
+      </body>
     </html>
   );
 }
