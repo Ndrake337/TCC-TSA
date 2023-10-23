@@ -12,8 +12,10 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/x-charts": "^6.0.0-alpha.16",
+    "chart.js": "^4.4.0",
     "next": "latest",
     "react": "latest",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "latest"
   },
   "devDependencies": {
