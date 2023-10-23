@@ -21,8 +21,8 @@ export default function Dashboard() {
   });
 
   return (
-    <main className="flex flex-col w-full h-fit items-center">
-      <div className="w- full shadow-lg rounded flex flex-col items-center p-4">
+    <main className="flex flex-col w-full h-fit flex-wrap items-center">
+      <div className="w- full shadow-lg rounded flex flex-col items-center p-4 grow basis-full">
         <strong>Titulo do Gráfico</strong>
         <BarChart chartData={energyData} />
       </div>
