@@ -5,12 +5,6 @@ import { randomUUID } from "crypto";
 
 export async function solarTrackerLogsRoutes(app: FastifyInstance) {
   app.post("/", async (request, reply) => {
-    const createSolarTrackerLogBodySchema = z.object({
-      register_time: z.string().datetime(),
-      current: z.number(),
-      power: z.number(),
-    });
-
     const solarTrakcerLogsSchema = object({
       logs: z
         .object({
