@@ -5,7 +5,7 @@ import { randomUUID } from "crypto";
 
 export async function solarTrackerLogsRoutes(app: FastifyInstance) {
   app.post("/", async (request, reply) => {
-    const solarTrakcerLogsSchema = object({
+    const solarTrackerLogsSchema = object({
       logs: z
         .object({
           register_time: z.string().datetime(),
@@ -15,7 +15,7 @@ export async function solarTrackerLogsRoutes(app: FastifyInstance) {
         .array(),
     });
 
-    const { logs } = solarTrakcerLogsSchema.parse(request.body);
+    const { logs } = solarTrackerLogsSchema.parse(request.body);
 
     for (const log of logs) {
       await knex("tb_solar_tracker_log").insert({
