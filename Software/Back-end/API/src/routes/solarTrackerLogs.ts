@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { z } from "zod";
+import { object, z } from "zod";
 import { knex } from "../database";
 import { randomUUID } from "crypto";
 
@@ -11,14 +11,26 @@ export async function solarTrackerLogsRoutes(app: FastifyInstance) {
       power: z.number(),
     });
 
-    const { register_time, current, power } =
-      createSolarTrackerLogBodySchema.parse(request.body);
-    await knex("tb_solar_tracker_log").insert({
-      id: randomUUID(),
-      register_time,
-      current,
-      power,
+    const solarTrakcerLogsSchema = object({
+      logs: z
+        .object({
+          register_time: z.string().datetime(),
+          current: z.number(),
+          power: z.number(),
+        })
+        .array(),
     });
+
+    const { logs } = solarTrakcerLogsSchema.parse(request.body);
+
+    for (const log of logs) {
+      await knex("tb_solar_tracker_log").insert({
+        id: randomUUID(),
+        register_time: log.register_time,
+        current: log.current,
+        power: log.power,
+      });
+    }
 
     return reply.status(201).send();
   });
