@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-row bg-white h-screen">
         <Menu />
-        <div className="h-screen text-black p-12">{children}</div>
+        <div className="w-full text-black p-12 h-full">{children}</div>
       </body>
     </html>
   );

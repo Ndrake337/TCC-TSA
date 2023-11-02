@@ -1,7 +1,9 @@
 "use client";
 import { data } from "@/assets/dataFrameTest";
 import { useState } from "react";
-import { BarChart } from "@/components/BarChart";
+import { AreaChart } from "@/components/AreaChart";
+import { BigNumbers } from "@/components/BigNumbers";
+import { Button } from "@/components/Button";
 
 export default function Dashboard() {
   const [energyData, setEnegyData] = useState({
@@ -20,12 +22,36 @@ export default function Dashboard() {
     ],
   });
 
+  const today = new Date();
+  const numberOfDaysToAdd = 3;
+  const date = today.setDate(today.getDate() + numberOfDaysToAdd);
+  const defaultValue = new Date(date).toISOString().split("T")[0]; // yyyy-mm-dd
+
   return (
-    <main className="flex flex-col w-full h-fit flex-wrap items-center">
-      <div className="w- full shadow-lg rounded flex flex-col items-center p-4 grow basis-full">
-        <strong>Titulo do Gráfico</strong>
-        <BarChart chartData={energyData} />
+    <div className="flex flex-col gap-6  items-center justify-center">
+      <div className="flex flex-row  items-center">
+        <strong className="text-xl">
+          Selecione a data que deseja filtrar para o gráfico abaixo:{" "}
+        </strong>
+        <input
+          type="date"
+          className="text-center text-xl"
+          value={defaultValue}
+        />
+        <Button label={"test"} />
       </div>
-    </main>
+      <div className="flex flex-row gap-6">
+        <BigNumbers title="Total Current" value={25.5} units="mA" key={1} />
+        <BigNumbers title="Total Power" value={86.0} units="mW" key={2} />
+      </div>
+
+      <div className="w-10/12">
+        <AreaChart
+          chartData={energyData}
+          chartTitle={"Energia X Dia"}
+          key={1}
+        />
+      </div>
+    </div>
   );
 }
