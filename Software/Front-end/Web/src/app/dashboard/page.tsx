@@ -20,6 +20,10 @@ export default function Dashboard() {
         fill: true,
       },
     ],
+    options: {
+      maintainAspectRatio: false,
+      responsive: true,
+    },
   });
 
   const today = new Date();
@@ -27,9 +31,9 @@ export default function Dashboard() {
   const defaultValue = new Date(date).toISOString().split("T")[0]; // yyyy-mm-dd
 
   return (
-    <div className="flex flex-col gap-6  items-center justify-center">
-      <div className="flex flex-row  items-center">
-        <strong className="text-xl">
+    <div className="flex flex-col w-full  h-full gap-6 items-center justify-center">
+      <div className="flex lg:flex-row max-lg:flex-col items-center max-lg:gap-3">
+        <strong className="lg:text-xl">
           Selecione a data que deseja filtrar para o gráfico abaixo:{" "}
         </strong>
         <input
@@ -44,7 +48,7 @@ export default function Dashboard() {
         <BigNumbers title="Total Power" value={86.0} units="mW" key={2} />
       </div>
 
-      <div className="w-10/12">
+      <div className="max-lg:w-full max-lg:h-full lg:w-10/12 ">
         <AreaChart
           chartData={energyData}
           chartTitle={"Energia X Dia"}
