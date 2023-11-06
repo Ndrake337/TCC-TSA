@@ -3,16 +3,14 @@ import { Button } from "@/components/Button";
 export default function Dashboard() {
   return (
     <div className="flex flex-col w-full items-center gap-4">
-      <form className="flex flex-col">
-        <div className="flex flex-row max-lg:flex-col gap-1">
-          <input
-            type="Name"
-            className="bg-white border-2 border-solid border-gray-300"
-            placeholder="Nome do Painel Solar"
-          />
+      <strong>Cadastre e consulte painéis solares no sistema</strong>
+      <form className="flex flex-col gap-4 w-full">
+        <div className="flex flex-row max-lg:flex-col gap-1 w-full ">
+          <input type="Name" placeholder="Nome do Painel Solar" />
         </div>
+        <Button label="Cadastrar" type="submit" />
       </form>
-      <Button label="Cadastrar" type="submit" />
+
       <div className="w-full h-[1px] bg-black rounded-3xl" />
       <table>
         <thead>
