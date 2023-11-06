@@ -8,6 +8,7 @@ export async function solarTrackerLogsRoutes(app: FastifyInstance) {
     const solarTrackerLogsSchema = object({
       logs: z
         .object({
+          id: z.string().uuid().optional(),
           register_time: z.string().datetime(),
           current: z.number(),
           power: z.number(),
@@ -18,13 +19,9 @@ export async function solarTrackerLogsRoutes(app: FastifyInstance) {
     const { logs } = solarTrackerLogsSchema.parse(request.body);
 
     for (const log of logs) {
-      await knex("tb_solar_tracker_log").insert({
-        id: randomUUID(),
-        register_time: log.register_time,
-        current: log.current,
-        power: log.power,
-      });
+      log.id = randomUUID();
     }
+    await knex("tb_solar_tracker_log").insert(logs);
 
     return reply.status(201).send();
   });
