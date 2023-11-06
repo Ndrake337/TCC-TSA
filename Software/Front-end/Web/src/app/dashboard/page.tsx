@@ -23,8 +23,7 @@ export default function Dashboard() {
   });
 
   const today = new Date();
-  const numberOfDaysToAdd = 3;
-  const date = today.setDate(today.getDate() + numberOfDaysToAdd);
+  const date = today.setDate(today.getDate());
   const defaultValue = new Date(date).toISOString().split("T")[0]; // yyyy-mm-dd
 
   return (
@@ -40,7 +39,7 @@ export default function Dashboard() {
         />
         <Button label={"test"} />
       </div>
-      <div className="flex flex-row gap-6">
+      <div className="flex flex-row gap-6 flex-wrap">
         <BigNumbers title="Total Current" value={25.5} units="mA" key={1} />
         <BigNumbers title="Total Power" value={86.0} units="mW" key={2} />
       </div>

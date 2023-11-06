@@ -10,7 +10,7 @@ export function MenuLink(props: iMenuLinkProps) {
     <Link
       key={props.link}
       href={props.link}
-      className="active:bg-cyan-950 rounded-r-full p-3 -ml-12 pl-12"
+      className="max-lg:active:bg-cyan-950 max-lg:rounded-r-full p-3 -ml-12 pl-12"
     >
       {props.title}
     </Link>
