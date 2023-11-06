@@ -1,5 +1,6 @@
 interface iButtonProps {
   label: string;
+  type?: string;
 }
 
 export function Button(props: iButtonProps) {
