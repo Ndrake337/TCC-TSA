@@ -10,8 +10,7 @@ export function Menu() {
         <nav className="flex flex-col w-full gap-2">
           <MenuLink link="/" title="Home" />
           <MenuLink link="/dashboard" title="Dashboard" />
-          <MenuLink link="/tracker" title="Tracker" />
-          <MenuLink link="/contato" title="Contato" />
+          <MenuLink link="/tracker" title="Tracker Panels" />
         </nav>
       </div>
     </div>

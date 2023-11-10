@@ -21,12 +21,7 @@ export function MenuMobile() {
 
       <Link href="/tracker" className="flex flex-col items-center p-0">
         <RadarRoundedIcon />
-        <span>Tracker</span>
-      </Link>
-
-      <Link href="/contato" className="flex flex-col items-center p-0">
-        <ChatRoundedIcon />
-        <span>Contato</span>
+        <span>Tracker Panels</span>
       </Link>
     </div>
   );
