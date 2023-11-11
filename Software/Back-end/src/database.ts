@@ -1,9 +1,14 @@
 import { knex as setupKnex, Knex } from "knex";
+import { env } from "./env";
+
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL env not found.");
+}
 
 export const config: Knex.Config = {
   client: "sqlite3",
   connection: {
-    filename: "./db/app.db",
+    filename: env.DATABASE_URL,
   },
   useNullAsDefault: true,
   migrations: {

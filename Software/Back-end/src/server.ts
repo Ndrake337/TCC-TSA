@@ -1,17 +1,6 @@
-import { fastify } from "fastify";
-import { solarTrackerLogsRoutes } from "./routes/solarTrackerLogs";
-import { panelsRoutes } from "./routes/panels";
-import cors from "@fastify/cors";
+import { app } from "./app";
+import { env } from "./env";
 
-export const app = fastify();
-
-app.register(cors, {
-  origin: "*",
-});
-
-app.register(solarTrackerLogsRoutes, { prefix: "logs" });
-app.register(panelsRoutes, { prefix: "panels" });
-
-app.listen({ port: 3333 }).then(() => {
+app.listen({ port: env.PORT }).then(() => {
   console.log("HTTP Server Running");
 });
