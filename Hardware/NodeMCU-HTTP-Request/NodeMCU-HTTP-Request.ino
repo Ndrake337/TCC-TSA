@@ -1,16 +1,21 @@
 #include <ArduinoJson.h>
 
-#include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+#include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
+#include <WiFiClientSecure.h>
 // Replace with your network credentials
 const char *ssid = "Sieria";
 const char *password = "#Msr11343";
 
 //iterador
 int i = 0;
+
+// http request variables
+const String URL = "https://tcc-tsa-api.onrender.com/logs";
+WiFiClientSecure httpsClient;
 
 //Declarando JSON
 const int capacity = JSON_OBJECT_SIZE(1) +JSON_ARRAY_SIZE(30) + 30 * JSON_OBJECT_SIZE(3);
@@ -76,9 +81,29 @@ void loop()
   
   Serial.println("");
   
-  if ((currentMinute == 15 || currentMinute == 00) && currentSecond == 1)
+  if ((currentMinute == 41|| currentMinute == 00) && currentSecond == 1)
   {
-    Serial.println("It Should Send The Data using HTTP");
+    const char *host = "tcc-tsa-api.onrender.com";
+    const char *uri = "/logs";
+    String output;
+    serializeJson(doc, output);
+    Serial.println("JSON to String");
+    const char *body = output.c_str();
+    char postStr[40];
+    sprintf(postStr, "POST %s HTTP/1.1", uri);
+    const int httpPort = 443; // 80 is for HTTP / 443 is for HTTPS!
+    httpsClient.setInsecure(); // this is the magical line that makes everything work
+    if (!httpsClient.connect(host, httpPort)) { //works!
+      Serial.println("connection failed");
+    }
+    httpsClient.println(postStr);
+    httpsClient.print("Host: "); httpsClient.println(host);
+    httpsClient.println("Content-Type: application/json");
+    httpsClient.print("Content-Length: "); httpsClient.println(strlen(body));
+    httpsClient.println("");    // extra `\r\n` to separate the http header and http body
+    httpsClient.println(body);
+        
+       
     i=0;
     logs.clear();
   }
