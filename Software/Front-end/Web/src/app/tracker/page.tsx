@@ -76,7 +76,7 @@ export default function Dashboard() {
         className="flex flex-col gap-4 w-full"
         onSubmit={(event) => {
           event.preventDefault();
-          createPanel(event.target.panelName.value);
+          createPanel((event.target as any).panelName.value);
         }}
       >
         <div className="flex flex-row max-lg:flex-col gap-1 w-full ">
