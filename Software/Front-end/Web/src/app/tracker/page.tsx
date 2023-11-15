@@ -9,7 +9,7 @@ import axios from "axios";
 export default function Dashboard() {
   const [apiData, setApiData] = useState<iPanel[]>();
   const fetchPanels = async () => {
-    const res = await fetch("http://localhost:3333/panels");
+    const res = await fetch("https://tcc-tsa-api.onrender.com/panels");
     const data: iPanels = await res.json();
 
     console.log(data.pannels);
@@ -28,7 +28,7 @@ export default function Dashboard() {
   async function deletePanel(id: string) {
     console.log(`Delete Panel: ${id}`);
 
-    await axios.delete(`http://localhost:3333/panels/${id}`);
+    await axios.delete(`https://tcc-tsa-api.onrender.com/panels/${id}`);
 
     fetchPanels();
   }
@@ -36,7 +36,7 @@ export default function Dashboard() {
   async function createPanel(name: string) {
     console.log(`Create Panel: ${name}`);
 
-    await axios.post("http://localhost:3333/panels", {
+    await axios.post("https://tcc-tsa-api.onrender.com/panels", {
       name,
     });
 

@@ -6,18 +6,68 @@ import { Button } from "@/components/Button";
 import { iLogs, iResponseLogs } from "@/interfaces/iLogs";
 
 export default function Dashboard() {
-  const [apiData, setApiData] = useState<iLogs[]>();
   const [energyData, setEnergyData] = useState();
+  const [bigNumberValue, setBigNumberValue] = useState<number | undefined>(0);
+  const [hoursOnGeneration, setHoursOnGeneration] = useState<
+    number | undefined
+  >(0);
 
-  useEffect(() => {
-    const fetchLogs = async () => {
-      const res = await fetch("http://localhost:3333/logs");
-      const data: iResponseLogs = await res.json();
+  async function fetchDataOnSubmitDashboard(dateToFilter) {
+    const res = await fetch(
+      `https://tcc-tsa-api.onrender.com/dashboard?dateToFilter=${dateToFilter}`
+    );
+    const data: iResponseLogs = await res.json();
 
-      setApiData(data.logs);
-    };
-    fetchLogs();
-  }, []);
+    const apiData: iLogs[] = data.logs;
+
+    apiData?.sort((a, b) => {
+      return new Date(a.register_time) - new Date(b.register_time);
+    });
+    setEnergyData({
+      labels: apiData?.map((log) => {
+        const date = log.register_time || "";
+        const hour = date.substring(11, 16).replace("Z", "");
+        if (
+          apiData.indexOf(log) % 5 === 0 ||
+          apiData.indexOf(log) === apiData.length - 1
+        ) {
+          return hour;
+        }
+        return "";
+      }),
+      datasets: [
+        {
+          label: "Energy Generation",
+          data: apiData?.map((log) => {
+            return log.power;
+          }),
+          borderColor: "#0284c7",
+          borderWidth: 3,
+          pointBorderColor: "#0284c7",
+          pointBorderWidth: 3,
+          tension: 0.5,
+          fill: true,
+        },
+      ],
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        scales: {
+          xAxes: {
+            ticks: {
+              maxTicksLimit: 5,
+            },
+          },
+        },
+      },
+    });
+    setBigNumberValue(
+      apiData?.reduce((acc, log) => {
+        acc += log.power;
+        return (acc / apiData.length) * 24;
+      }, 0)
+    );
+  }
 
   return (
     <div className="flex flex-col w-full  h-full gap-6 items-center justify-center">
@@ -30,49 +80,7 @@ export default function Dashboard() {
           onSubmit={(event) => {
             event.preventDefault();
             let dateFilteredValue = event.target.dateFilter.value;
-
-            setEnergyData({
-              labels: apiData
-                ?.map((log) => {
-                  const date = log.register_time || "";
-                  const dateFormated = date.substring(0, 10);
-                  const hour = date.substring(11, 16).replace("Z", "");
-
-                  console.log(
-                    `DateFormated: ${dateFormated} | DateFilterValue: ${dateFilteredValue}`
-                  );
-
-                  if (dateFormated === dateFilteredValue) {
-                    return hour;
-                  }
-                })
-                .sort()
-                .filter((n) => n),
-              datasets: [
-                {
-                  label: "Energy Generation",
-                  data: apiData
-                    ?.map((log) => {
-                      const date = log.register_time || "";
-                      const dateFormated = date.substring(0, 10);
-                      if (dateFormated === dateFilteredValue) {
-                        return log.power;
-                      }
-                    })
-                    .filter((n) => n),
-                  borderColor: "#0284c7",
-                  borderWidth: 3,
-                  pointBorderColor: "#0284c7",
-                  pointBorderWidth: 3,
-                  tension: 0.5,
-                  fill: true,
-                },
-              ],
-              options: {
-                maintainAspectRatio: false,
-                responsive: true,
-              },
-            });
+            fetchDataOnSubmitDashboard(dateFilteredValue);
           }}
         >
           <input
@@ -89,7 +97,12 @@ export default function Dashboard() {
         </form>
       </div>
       <div className="flex flex-row gap-6 flex-wrap">
-        <BigNumbers title="Total Power" value={86.0} units="kW/H" key={2} />
+        <BigNumbers
+          title="Energia Gerada"
+          value={bigNumberValue?.toFixed(2)}
+          units="mWh/dia"
+          key={2}
+        />
       </div>
 
       <div className="max-lg:w-full max-lg:h-full lg:w-10/12 ">
