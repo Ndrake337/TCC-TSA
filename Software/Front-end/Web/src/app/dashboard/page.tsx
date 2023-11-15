@@ -4,15 +4,16 @@ import { AreaChart } from "@/components/AreaChart";
 import { BigNumbers } from "@/components/BigNumbers";
 import { Button } from "@/components/Button";
 import { iLogs, iResponseLogs } from "@/interfaces/iLogs";
+import { ExtendedHTMLInputElement } from "@/interfaces/iExtendendHTMLInputElement";
 
 export default function Dashboard() {
-  const [energyData, setEnergyData] = useState();
+  const [energyData, setEnergyData] = useState<any>();
   const [bigNumberValue, setBigNumberValue] = useState<number | undefined>(0);
   const [hoursOnGeneration, setHoursOnGeneration] = useState<
     number | undefined
   >(0);
 
-  async function fetchDataOnSubmitDashboard(dateToFilter) {
+  async function fetchDataOnSubmitDashboard(dateToFilter: string) {
     const res = await fetch(
       `https://tcc-tsa-api.onrender.com/dashboard?dateToFilter=${dateToFilter}`
     );
@@ -21,7 +22,10 @@ export default function Dashboard() {
     const apiData: iLogs[] = data.logs;
 
     apiData?.sort((a, b) => {
-      return new Date(a.register_time) - new Date(b.register_time);
+      return (
+        new Date(a.register_time).valueOf() -
+        new Date(b.register_time).valueOf()
+      );
     });
     setEnergyData({
       labels: apiData?.map((log) => {
@@ -79,7 +83,8 @@ export default function Dashboard() {
           className="flex flex-row justify-center gap-4"
           onSubmit={(event) => {
             event.preventDefault();
-            let dateFilteredValue = event.target.dateFilter.value;
+            let dateFilteredValue = (event.target as ExtendedHTMLInputElement)
+              .dateFilter.value;
             fetchDataOnSubmitDashboard(dateFilteredValue);
           }}
         >
