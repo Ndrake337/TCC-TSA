@@ -1,5 +1,5 @@
 export interface iBigNumbersProps {
   title: string;
-  value: string | undefined;
+  value: number | undefined;
   units: string;
 }

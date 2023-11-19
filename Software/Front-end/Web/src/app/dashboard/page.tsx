@@ -9,9 +9,6 @@ import { ExtendedHTMLInputElement } from "@/interfaces/iExtendendHTMLInputElemen
 export default function Dashboard() {
   const [energyData, setEnergyData] = useState<any>();
   const [bigNumberValue, setBigNumberValue] = useState<number | undefined>(0);
-  const [hoursOnGeneration, setHoursOnGeneration] = useState<
-    number | undefined
-  >(0);
 
   async function fetchDataOnSubmitDashboard(dateToFilter: string) {
     const res = await fetch(
@@ -31,13 +28,7 @@ export default function Dashboard() {
       labels: apiData?.map((log) => {
         const date = log.register_time || "";
         const hour = date.substring(11, 16).replace("Z", "");
-        if (
-          apiData.indexOf(log) % 5 === 0 ||
-          apiData.indexOf(log) === apiData.length - 1
-        ) {
-          return hour;
-        }
-        return "";
+        return hour;
       }),
       datasets: [
         {
@@ -65,12 +56,16 @@ export default function Dashboard() {
         },
       },
     });
-    setBigNumberValue(
-      apiData?.reduce((acc, log) => {
-        acc += log.power;
-        return (acc / apiData.length) * 24;
-      }, 0)
+    const bigNumberValueFromApi = apiData?.reduce((acc, log) => {
+      acc += Number(log.power);
+      return acc;
+    }, 0);
+
+    console.log(
+      "BigNumber Should Be: " + bigNumberValueFromApi / apiData.length
     );
+
+    setBigNumberValue(bigNumberValueFromApi / apiData.length);
   }
 
   return (
@@ -104,7 +99,7 @@ export default function Dashboard() {
       <div className="flex flex-row gap-6 flex-wrap">
         <BigNumbers
           title="Energia Gerada"
-          value={bigNumberValue?.toFixed(2)}
+          value={Number(bigNumberValue?.toFixed(2))}
           units="mWh/dia"
           key={2}
         />
